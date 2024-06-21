@@ -10,28 +10,36 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
-      validate: validator.isEmail,
+      validate: [validator.isEmail, "Please provide a valid email"],
       required: [true, "Email is Required!"],
     },
     password: {
       type: String,
       required: [true, "Password is Required!"],
     },
-    isDoctor: {
-      type: Boolean,
-      default: false,
+    phone_number: {
+      type: String,
+      validate: [validator.isMobilePhone, "Please provide a valid phone number"],
+      required: [true, "Phone number is Required!"],
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    address: {
+      type: String,
+      required: [true, "Address is Required!"],
     },
-    seenNotifications: {
-      type: Array,
-      default: [],
+    date_of_birth: {
+      type: Date,
+      required: [true, "Date of Birth is Required!"],
     },
-    unSeenNotifications: {
-      type: Array,
-      default: [],
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      required: [true, "Gender is Required!"],
+    },
+    role: {
+      type: String,
+      enum: ["patient", "doctor", "admin"],
+      default: "patient",
+      required: [true, "Role is Required!"],
     },
   },
   { timestamps: true }

@@ -1,156 +1,129 @@
-import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware.js";
+import express from 'express';
 import {
-  getDoctorInfo,
-  updateDoctorProfile,
-  getDoctorById,
-  getDoctorAppointments,
-  updateAppointmentStatus,
-} from "../controllers/doctorController.js";
+  getAllDoctors,
+  updateDoctor,
+  deleteDoctor,
+} from '../controllers/doctorController.js';
 
-//Router obj
 const router = express.Router();
 
-//Get doctor info by doctor ID
+// Get all doctors
 /**
  * @swagger
- * /api/v1/doctor/get-doctor-info:
- *   post:
- *     summary: Retrieve information of a specific doctor
- *     tags: [Doctor]
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userId:
- *                 type: string
- *                 description: The user ID of the doctor.
- *     responses:
- *       200:
- *         description: Doctor data fetched successfully.
- *       404:
- *         description: Doctor not found.
- *       500:
- *         description: Internal server error.
- */
-router.post("/get-doctor-info", authMiddleware, getDoctorInfo);
-
-//Update doctor pofile
-/**
- * @swagger
- * /api/v1/doctor/update-profile:
- *   post:
- *     summary: Update the profile of a doctor
- *     tags: [Doctor]
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Doctor'
- *     responses:
- *       201:
- *         description: Doctor Profile Updated.
- *       404:
- *         description: Doctor not found.
- *       500:
- *         description: Internal server error.
- */
-router.post("/update-profile", authMiddleware, updateDoctorProfile);
-
-//Get Doctor By Id
-/**
- * @swagger
- * /api/v1/doctor/getDoctorById:
- *   post:
- *     summary: Retrieve a doctor by their ID
- *     tags: [Doctor]
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               doctorId:
- *                 type: string
- *                 description: The unique identifier of the doctor.
- *     responses:
- *       200:
- *         description: Doctor get by id successfully.
- *       404:
- *         description: Doctor not found.
- *       500:
- *         description: Internal server error.
- */
-router.post("/getDoctorById", authMiddleware, getDoctorById);
-
-//Get Appointments of Doctor
-/**
- * @swagger
- * /api/v1/doctor/doctor-appointments:
+ * /api/v1/doctors:
  *   get:
- *     summary: Get appointments associated with a doctor
- *     tags: [Doctor]
- *     security:
- *       - BearerAuth: []
+ *     summary: Get all doctors
+ *     tags: [Doctors]
  *     responses:
  *       200:
- *         description: Doctor Appointments Fetched Successfully.
- *       404:
- *         description: No appointments found.
+ *         description: List of all doctors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   user_id:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *                       phone_number:
+ *                         type: string
+ *                       address:
+ *                         type: string
+ *                       date_of_birth:
+ *                         type: string
+ *                         format: date
+ *                       gender:
+ *                         type: string
+ *                   specialty:
+ *                     type: string
+ *                   availability:
+ *                     type: string
+ *                   approval_status:
+ *                     type: string
+ *                     enum: [pending, approved, rejected]
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   updatedAt:
+ *                     type: string
+ *                     format: date-time
  *       500:
- *         description: Internal server error.
+ *         description: Error fetching doctors
  */
-router.get("/doctor-appointments", authMiddleware, getDoctorAppointments);
+router.get('/', getAllDoctors);
 
-//Appointment status update
+// Update a doctor
 /**
  * @swagger
- * /api/v1/doctor/updateAppointmentStatus:
- *   post:
- *     summary: Update the status of an appointment
- *     tags: [Doctor]
- *     security:
- *       - BearerAuth: []
+ * /api/v1/doctors/{id}:
+ *   put:
+ *     summary: Update a doctor by ID
+ *     tags: [Doctors]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The doctor ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - appointmentsId
- *               - status
  *             properties:
- *               appointmentsId:
+ *               specialty:
  *                 type: string
- *                 description: The unique identifier of the appointment.
- *               status:
+ *               availability:
  *                 type: string
- *                 description: The new status for the appointment.
+ *               approval_status:
+ *                 type: string
+ *                 enum: [pending, approved, rejected]
  *     responses:
  *       200:
- *         description: Appointment status updated.
+ *         description: Doctor updated successfully
+ *       400:
+ *         description: Invalid input
  *       404:
- *         description: Appointment not found.
+ *         description: Doctor not found
  *       500:
- *         description: Internal server error.
+ *         description: Error updating doctor
  */
-router.post(
-  "/updateAppointmentStatus",
-  authMiddleware,
-  updateAppointmentStatus
-);
+router.put('/:id', updateDoctor);
 
-//Export
+// Delete a doctor
+/**
+ * @swagger
+ * /api/v1/doctors/{id}:
+ *   delete:
+ *     summary: Delete a doctor by ID
+ *     tags: [Doctors]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The doctor ID
+ *     responses:
+ *       200:
+ *         description: Doctor deleted successfully
+ *       404:
+ *         description: Doctor not found
+ *       500:
+ *         description: Error deleting doctor
+ */
+router.delete('/:id', deleteDoctor);
+
 export default router;

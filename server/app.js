@@ -5,8 +5,12 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./database/db.js";
 import userRoutes from "./routes/userRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js";
+import applicatationRoutes from "./routes/applicationRoutes.js";
+import nutritionRoutes from "./routes/nutritionRoutes.js";
+import physicalRecordRoutes from "./routes/physicalRecordRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
+import appointmentRoutes from "./routes/appointmentRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -52,8 +56,12 @@ const swaggerOptions = {
 
 //***** MIDDLEWARE ROUTES *****/
 app.use("/api/v1/auth", userRoutes);
-app.use("/api/v1/admin", adminRoutes);
-app.use("/api/v1/doctor", doctorRoutes);
+app.use("/api/v1/applications", applicatationRoutes);
+app.use("/api/v1/nutrition-plans", nutritionRoutes);
+app.use("/api/v1/physical-records", physicalRecordRoutes); 
+app.use("/api/v1/doctors", doctorRoutes);
+app.use("/api/v1/appointments", appointmentRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 
 // Initialize swagger-jsdoc
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

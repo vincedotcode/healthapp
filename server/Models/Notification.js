@@ -1,29 +1,32 @@
 import mongoose from "mongoose";
 
-const doctorSchema = new mongoose.Schema(
+const notificationSchema = new mongoose.Schema(
   {
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      unique: true,
       required: true,
     },
-    specialty: {
+    message: {
       type: String,
       required: true,
     },
-    availability: {
+    notification_type: {
       type: String,
       required: true,
     },
-    approval_status: {
-      type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
+    sent_at: {
+      type: Date,
       required: true,
+    },
+    read_at: {
+      type: Date,
+    },
+    link: {
+      type: String,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Doctor", doctorSchema);
+export default mongoose.model("Notification", notificationSchema);
