@@ -7,7 +7,6 @@ const Page = () => {
     <View style={styles.container}>
       <Onboarding />
       <BottomLoginSheet />
-      {/* <App /> */}
     </View>
   );
 };

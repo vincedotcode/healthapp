@@ -7,6 +7,14 @@ const applicationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    specialty: {
+      type: String,
+      required: true,
+    },
+    availability: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

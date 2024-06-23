@@ -5,12 +5,16 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./database/db.js";
 import userRoutes from "./routes/userRoutes.js";
-import applicatationRoutes from "./routes/applicationRoutes.js";
+import applicationRoutes from "./routes/applicationRoutes.js";
 import nutritionRoutes from "./routes/nutritionRoutes.js";
 import physicalRecordRoutes from "./routes/physicalRecordRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
+import medicationRoutes from "./routes/medicationRoutes.js";
+import symptomRoutes from "./routes/symptomRoutes.js";
+import healthRoutes from "./routes/healthRoutes.js";
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -23,14 +27,10 @@ connectDB();
 // REST OBJ
 const app = express();
 
-
 //******** MIDDLEWARE *******/
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-
-
-
 
 //***** SWAGGER INITIATION *****/
 const swaggerOptions = {
@@ -54,20 +54,24 @@ const swaggerOptions = {
   apis: ['./routes/*.js'],
 };
 
-//***** MIDDLEWARE ROUTES *****/
-app.use("/api/v1/auth", userRoutes);
-app.use("/api/v1/applications", applicatationRoutes);
-app.use("/api/v1/nutrition-plans", nutritionRoutes);
-app.use("/api/v1/physical-records", physicalRecordRoutes); 
-app.use("/api/v1/doctors", doctorRoutes);
-app.use("/api/v1/appointments", appointmentRoutes);
-app.use("/api/v1/notifications", notificationRoutes);
-
 // Initialize swagger-jsdoc
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Serve swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+//***** MIDDLEWARE ROUTES *****/
+app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/applications", applicationRoutes);
+app.use("/api/v1/nutrition-plans", nutritionRoutes);
+app.use("/api/v1/physical-records", physicalRecordRoutes); 
+app.use("/api/v1/doctors", doctorRoutes);
+app.use("/api/v1/appointments", appointmentRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
+app.use("/api/v1/profile", profileRoutes);
+app.use("/api/v1/medications", medicationRoutes);
+app.use("/api/v1/symptoms", symptomRoutes);
+app.use("/api/v1/healthrecords", healthRoutes);
 
 //******** PORTS AND LISTEN *******/
 const port = process.env.PORT || 8080;

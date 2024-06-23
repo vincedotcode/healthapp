@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/health', { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
   console.log(
     `Connected to MongoDb Database ${mongoose.connection.host}.`.bgBrightGreen

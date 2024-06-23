@@ -5,7 +5,7 @@ const Onboarding = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/images/onboarding-2.jpeg")}
+        source={require("../assets/images/pexels-shvetsa-3683102.jpg")}
         style={styles.image}
       />
     </View>

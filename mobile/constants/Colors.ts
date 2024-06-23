@@ -20,6 +20,8 @@ const colors = {
     input: "hsl(20, 5.9%, 90%)",
     ring: "hsl(20, 14.3%, 4.1%)",
     radius: "0.75rem",
+    success: "hsl(120, 28.6%, 90.2%)",
+    successText: "hsl(120, 28.6%, 14.1%)",
   },
   dark: {
     background: "hsl(20, 14.3%, 4.1%)",

@@ -21,8 +21,71 @@ export const getAllAppointments = async (req, res) => {
       });
     }
   };
-// Create a new appointment
-// Create a new appointment
+
+
+// Get appointments by user ID
+export const getAppointmentsByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const appointments = await Appointment.find({ user_id: userId })
+      .populate({
+        path: 'user_id',
+        select: 'name email',
+      })
+      .populate({
+        path: 'doctor_id',
+        select: 'specialty availability',
+        populate: {
+          path: 'user_id',
+          select: 'name',
+        },
+      });
+    res.status(200).json({
+      success: true,
+      data: appointments,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching appointments',
+      error: error.message,
+    });
+  }
+};
+
+// Get appointments by doctor ID
+export const getAppointmentsByDoctorId = async (req, res) => {
+  const { doctorId } = req.params;
+  try {
+    const appointments = await Appointment.find({ doctor_id: doctorId })
+      .populate({
+        path: 'user_id',
+        select: 'name email',
+      })
+      .populate({
+        path: 'doctor_id',
+        select: 'specialty availability',
+        populate: {
+          path: 'user_id',
+          select: 'name',
+        },
+      });
+    res.status(200).json({
+      success: true,
+      data: appointments,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching appointments',
+      error: error.message,
+    });
+  }
+};
+
+
+
+
 export const createAppointment = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

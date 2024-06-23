@@ -12,10 +12,15 @@ const healthRecordSchema = new mongoose.Schema(
       ref: "Doctor",
       required: true,
     },
+    appointment_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Appointment",
+      required: true,
+    },
     record_type: {
       type: String,
       required: true,
-      enum: ["Diagnosis", "Treatment", "Prescription", "Lab Result", "Follow-up"], // Additional types for more specificity
+      enum: ["Diagnosis", "Treatment", "Prescription", "Lab Result", "Follow-up"], 
     },
     description: {
       type: String,

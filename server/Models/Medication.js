@@ -7,6 +7,11 @@ const medicationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    appointment_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Appointment",
+      required: true,
+    },
     medication_name: {
       type: String,
       required: true,

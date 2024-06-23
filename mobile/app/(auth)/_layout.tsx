@@ -8,7 +8,7 @@ import Colors from "@/constants/Colors";
 const Layout = () => {
   const router = useRouter();
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <Tabs
@@ -23,7 +23,7 @@ const Layout = () => {
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
-          marginTop: -5,  // Adjusts the spacing between icon and text
+          marginTop: -5,
         },
         tabBarIconStyle: {
           marginBottom: -3,
@@ -33,37 +33,42 @@ const Layout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: "Explore",
+          tabBarLabel: "Health",
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="search" size={size} color={color} />
+            <Ionicons name="fitness-outline" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="wishlists"
+        name="appointments"
         options={{
-          tabBarLabel: "Wishlists",
+          tabBarLabel: "Appointments",
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="heart-outline" size={size} color={color} />
+            <Ionicons name="medkit-outline" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="trips"
+        name="AI"
         options={{
-          tabBarLabel: "Trips",
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome5 name="airbnb" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="inbox"
-        options={{
-          tabBarLabel: "Inbox",
+          tabBarLabel: "AI",
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons
-              name="message-outline"
+            name="robot"
+            size={size}
+            color={color}
+          />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="doctor"
+        options={{
+          tabBarLabel: "Doctors",
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons
+              name="doctor"
               size={size}
               color={color}
             />

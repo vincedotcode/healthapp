@@ -1,6 +1,26 @@
 import Application from "../Models/Application.js";
 import DoctorDocument from "../Models/Document.js";
 import Doctor from "../Models/DoctorModel.js";
+import User from "../Models/UserModel.js";
+
+// Get applications by user ID
+export const getApplicationsByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const applications = await Application.find({ user_id: userId }).populate('user_id', 'name email');
+    res.status(200).json({
+      success: true,
+      data: applications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching applications",
+      error: error.message,
+    });
+  }
+};
+
 
 // Get all applications
 export const getAllApplications = async (req, res) => {
@@ -21,12 +41,12 @@ export const getAllApplications = async (req, res) => {
 
 // Create a new application
 export const createApplication = async (req, res) => {
-  const { user_id, documents } = req.body;
+  const { user_id, specialty, availability, documents } = req.body;
   
-  if (!user_id) {
+  if (!user_id || !specialty || !availability) {
     return res.status(400).json({
       success: false,
-      message: "User ID is required",
+      message: "User ID, specialty, and availability are required",
     });
   }
 
@@ -38,7 +58,7 @@ export const createApplication = async (req, res) => {
   }
 
   try {
-    const newApplication = new Application({ user_id });
+    const newApplication = new Application({ user_id, specialty, availability });
     const savedApplication = await newApplication.save();
 
     const newDoctorDocument = new DoctorDocument({
@@ -90,14 +110,23 @@ export const updateApplicationStatus = async (req, res) => {
       if (!doctor) {
         doctor = new Doctor({
           user_id: application.user_id,
-          specialty: "Pending", // Placeholder, should be updated separately
-          availability: "Pending", // Placeholder, should be updated separately
+          specialty: application.specialty,
+          availability: application.availability,
           approval_status: status,
         });
       } else {
+        doctor.specialty = application.specialty;
+        doctor.availability = application.availability;
         doctor.approval_status = status;
       }
       await doctor.save();
+
+      // Update user role to 'doctor'
+      const user = await User.findById(application.user_id);
+      if (user) {
+        user.role = 'doctor';
+        await user.save();
+      }
     }
 
     res.status(200).json({
@@ -112,7 +141,6 @@ export const updateApplicationStatus = async (req, res) => {
     });
   }
 };
-
 // Delete an application
 export const deleteApplication = async (req, res) => {
   const { id } = req.params;

@@ -4,7 +4,7 @@ import React from "react";
 const Wishlists = () => {
   return (
     <View>
-      <Text>Wishlists</Text>
+      <Text>AI BOT</Text>
     </View>
   );
 };

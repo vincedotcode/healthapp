@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet, Text } from 'react-native';
-import Listings from "@/components/Listings";
-import { Stack, useRouter } from "expo-router";
-import ExploreHeader from "@/components/ExploreHeader";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { getPhysicalRecords, PhysicalRecord } from '@/services/physical';
-import PhysicalRecordCard from '@/components/PhysicalRecordCard';
+import { getAppointmentsByUserId, Appointment } from '@/services/appointment';
 import { useAuth } from '@/hooks/useAuth';
+import AppointmentCard from '@/components/AppointmentCard';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Stack } from 'expo-router';
+import ExploreHeader from '@/components/ExploreHeader';
 import Button from '@/components/Button';
 import EmptyCard from '@/components/EmptyCard';
 
-const Page: React.FC = () => {
-  const router = useRouter();
+const UserAppointments: React.FC = () => {
   const { user } = useAuth();
-  const [records, setRecords] = useState<PhysicalRecord[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
-      getPhysicalRecords(user._id)
+      getAppointmentsByUserId(user._id)
         .then(response => {
-          setRecords(response.data);
+          setAppointments(response.data);
           setLoading(false);
         })
         .catch(err => {
@@ -31,8 +29,8 @@ const Page: React.FC = () => {
     }
   }, [user]);
 
-  const handleAddRecord = () => {
-    router.push('(auth)/addrecord');
+  const handleAddAppointment = () => {
+    // router.push('(modal)/addappointment');
   };
 
   if (loading) {
@@ -52,15 +50,13 @@ const Page: React.FC = () => {
       />
       <ScrollView style={styles.container}>
         <View style={styles.addRecord}>
-          <Button onPress={handleAddRecord}>
-            Add Record
-          </Button>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>Appointments</Text>
         </View>
-        {records.length === 0 ? (
-          <EmptyCard title="No records found" />
+        {appointments.length === 0 ? (
+          <EmptyCard title="No appointments found" />
         ) : (
-          records.map(record => (
-            <PhysicalRecordCard key={record._id} record={record} />
+          appointments.map(appointment => (
+            <AppointmentCard key={appointment._id} appointment={appointment} />
           ))
         )}
       </ScrollView>
@@ -74,10 +70,10 @@ const styles = StyleSheet.create({
   },
   addRecord: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
   },
 });
 
-export default Page;
+export default UserAppointments;
