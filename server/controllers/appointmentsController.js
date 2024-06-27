@@ -22,7 +22,41 @@ export const getAllAppointments = async (req, res) => {
     }
   };
 
-
+// Get appointment by ID
+export const getAppointmentById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const appointment = await Appointment.findById(id)
+      .populate({
+        path: 'user_id',
+        select: 'name email',
+      })
+      .populate({
+        path: 'doctor_id',
+        select: 'specialty availability',
+        populate: {
+          path: 'user_id',
+          select: 'name',
+        },
+      });
+    if (!appointment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Appointment not found',
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: appointment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching appointment',
+      error: error.message,
+    });
+  }
+};
 // Get appointments by user ID
 export const getAppointmentsByUserId = async (req, res) => {
   const { userId } = req.params;

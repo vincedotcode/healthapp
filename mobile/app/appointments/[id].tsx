@@ -29,8 +29,7 @@ const AppointmentsPage: React.FC = () => {
   };
 
   const handleViewDetails = (appointmentId: string) => {
-    // Implement the logic to view appointment details here
-    console.log(`Viewing details for appointment ${appointmentId}`);
+    router.push(`/appointments/view/${appointmentId}`);
   };
 
   const fetchAppointments = async () => {
