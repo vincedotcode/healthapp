@@ -57,3 +57,51 @@ export const getPhysicalRecords = async (userId: string): Promise<PhysicalRecord
     }
   }
 };
+
+interface CreatePhysicalRecord {
+  user_id: string;
+  weight: number;
+  height: number;
+  body_fat_percentage: number;
+  muscle_mass: number;
+  water_percentage: number;
+  waist_circumference: number;
+  hip_circumference: number;
+  blood_pressure: BloodPressure;
+  heart_rate: number;
+  notes: string;
+}
+
+interface CreatePhysicalRecordResponse {
+  success: boolean;
+  data: PhysicalRecord;
+}
+
+export const createPhysicalRecord = async (record: CreatePhysicalRecord): Promise<CreatePhysicalRecordResponse> => {
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/physical-records`;
+
+  const bmi = (record.weight / ((record.height / 100) ** 2)).toFixed(2);
+
+  try {
+    const response = await axios.post<CreatePhysicalRecordResponse>(url, {
+      ...record,
+      bmi: parseFloat(bmi)
+    });
+    return response.data;
+  } catch (error) {
+    const axiosError = error as AxiosError<ApiResponse>;
+    if (axiosError.response) {
+      throw new Error(JSON.stringify({
+        statusCode: axiosError.response.status,
+        message: axiosError.response.data.message || ['An unexpected error occurred'],
+        error: axiosError.response.data.error || 'Bad Request'
+      }));
+    } else {
+      throw new Error(JSON.stringify({
+        statusCode: 500,
+        message: ['Network Error or Internal Server Error'],
+        error: 'Server Error'
+      }));
+    }
+  }
+};

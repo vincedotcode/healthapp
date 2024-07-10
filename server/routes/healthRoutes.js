@@ -7,6 +7,57 @@ import {
 
 const router = express.Router();
 
+// Swagger schema definition for HealthRecord
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HealthRecord:
+ *       type: object
+ *       required:
+ *         - user_id
+ *         - doctor_id
+ *         - appointment_id
+ *         - record_type
+ *         - description
+ *         - record_data
+ *         - status
+ *       properties:
+ *         user_id:
+ *           type: string
+ *         doctor_id:
+ *           type: string
+ *         appointment_id:
+ *           type: string
+ *         record_type:
+ *           type: string
+ *           enum: ["Diagnosis", "Treatment", "Prescription", "Lab Result", "Follow-up"]
+ *         description:
+ *           type: string
+ *         record_data:
+ *           type: string
+ *         attachment_path:
+ *           type: string
+ *         follow_up_date:
+ *           type: string
+ *           format: date
+ *         symptoms:
+ *           type: string
+ *         treatment:
+ *           type: string
+ *         medication_prescribed:
+ *           type: string
+ *         lab_results:
+ *           type: string
+ *         notes:
+ *           type: string
+ *         status:
+ *           type: string
+ *           enum: ["Pending", "Reviewed", "Completed"]
+ *         reviewed_by:
+ *           type: string
+ */
+
 // Get health records by user ID
 /**
  * @swagger
@@ -75,46 +126,7 @@ router.get('/appointment/:appointmentId', getHealthRecordsByAppointmentId);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - user_id
- *               - doctor_id
- *               - record_type
- *               - description
- *               - record_data
- *               - status
- *             properties:
- *               user_id:
- *                 type: string
- *               doctor_id:
- *                 type: string
- *               record_type:
- *                 type: string
- *                 enum: ["Diagnosis", "Treatment", "Prescription", "Lab Result", "Follow-up"]
- *               description:
- *                 type: string
- *               record_data:
- *                 type: string
- *               attachment_path:
- *                 type: string
- *               follow_up_date:
- *                 type: string
- *                 format: date
- *               symptoms:
- *                 type: string
- *               treatment:
- *                 type: string
- *               medication_prescribed:
- *                 type: string
- *               lab_results:
- *                 type: string
- *               notes:
- *                 type: string
- *               status:
- *                 type: string
- *                 enum: ["Pending", "Reviewed", "Completed"]
- *               reviewed_by:
- *                 type: string
+ *             $ref: '#/components/schemas/HealthRecord'
  *     responses:
  *       201:
  *         description: Health record created successfully

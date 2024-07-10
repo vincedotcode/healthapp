@@ -2,7 +2,8 @@ import express from 'express';
 import {
   getMedicationsByUserId,
   createMedication,
-  getMedicationsByAppointmentId
+  getMedicationsByAppointmentId,
+  deleteMedication
 } from '../controllers/medicationController.js';
 
 const router = express.Router();
@@ -127,5 +128,32 @@ router.get('/appointment/:appointmentId', getMedicationsByAppointmentId);
  *         description: Error creating medication
  */
 router.post('/', createMedication);
+
+
+// Delete medication by ID
+/**
+ * @swagger
+ * /api/v1/medications/{id}:
+ *   delete:
+ *     summary: Delete medication by ID
+ *     tags: [Medications]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The medication ID
+ *     responses:
+ *       200:
+ *         description: Medication deleted successfully
+ *       404:
+ *         description: Medication not found
+ *       500:
+ *         description: Error deleting medication
+ */
+router.delete('/:id', deleteMedication);
+
+
 
 export default router;

@@ -4,6 +4,10 @@ import DoctorCard from '@/components/DoctorCard';
 import EmptyCard from '@/components/EmptyCard';
 import { getAllDoctors } from '@/services/doctor';
 import { Doctor } from '@/services/doctor';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Stack, useRouter } from 'expo-router';
+import TitleHeader from '@/components/TitleHeader';
+
 
 const DoctorScreen: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -33,6 +37,12 @@ const DoctorScreen: React.FC = () => {
   }
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <Stack.Screen
+      options={{
+        header: () => <TitleHeader pageName="Doctor" />,
+      }}
+    />
     <ScrollView contentContainerStyle={styles.container}>
       {doctors.length > 0 ? (
         doctors.map((doctor) => (
@@ -42,6 +52,7 @@ const DoctorScreen: React.FC = () => {
         <EmptyCard title="No doctors available" />
       )}
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

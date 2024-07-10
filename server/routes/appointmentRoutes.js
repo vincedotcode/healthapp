@@ -6,6 +6,7 @@ import {
   deleteAppointment,
   getAppointmentsByUserId,
   getAppointmentsByDoctorId,
+  getAppointmentById,
 } from '../controllers/appointmentsController.js';
 
 const router = express.Router();
@@ -69,6 +70,30 @@ const router = express.Router();
  *         description: Error fetching appointments
  */
 router.get('/', getAllAppointments);
+
+// Get appointment by ID
+/**
+ * @swagger
+ * /api/v1/appointments/{id}:
+ *   get:
+ *     summary: Get an appointment by ID
+ *     tags: [Appointments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The appointment ID
+ *     responses:
+ *       200:
+ *         description: Appointment details
+ *       404:
+ *         description: Appointment not found
+ *       500:
+ *         description: Error fetching appointment
+ */
+router.get('/:id', getAppointmentById);
 
 // Create a new appointment
 /**

@@ -57,3 +57,28 @@ export const getMedicationsByAppointmentId = async (req, res) => {
     });
   }
 };
+
+
+// Delete medication by ID
+export const deleteMedication = async (req, res) => {
+  try {
+    const medication = await Medication.findByIdAndDelete(req.params.id);
+    if (!medication) {
+      return res.status(404).json({
+        success: false,
+        message: 'Medication not found',
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Medication deleted successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting medication',
+      error: error.message,
+    });
+  }
+};
+

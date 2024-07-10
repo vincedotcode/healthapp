@@ -1,14 +1,11 @@
-// app/appointments/[id].tsx
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack, Link } from 'expo-router';
-import { getAppointmentsByDoctorId, Appointment } from '@/services/appointment';
+import { getAppointmentsByDoctorId, updateAppointmentStatus, Appointment } from '@/services/appointment';
 import Colors from '@/constants/Colors';
 import AppointmentCardDoctor from '@/components/AppointmentCardDoctor';
 import EmptyCard from '@/components/EmptyCard';
 import { Ionicons } from "@expo/vector-icons";
-
 
 const AppointmentsPage: React.FC = () => {
   const { id: doctorId } = useLocalSearchParams<{ id: string }>();
@@ -19,9 +16,7 @@ const AppointmentsPage: React.FC = () => {
 
   const handleUpdateStatus = async (appointmentId: string, status: string) => {
     try {
-      // Implement the logic to update the appointment status here
-      console.log(`Updating appointment ${appointmentId} to ${status}`);
-      // After successful update, refetch the appointments
+      await updateAppointmentStatus(appointmentId, status);
       await fetchAppointments();
     } catch (err) {
       console.error('Error updating appointment status:', err);
@@ -29,8 +24,7 @@ const AppointmentsPage: React.FC = () => {
   };
 
   const handleViewDetails = (appointmentId: string) => {
-    // Implement the logic to view appointment details here
-    console.log(`Viewing details for appointment ${appointmentId}`);
+    router.push(`/appointments/view/${appointmentId}`);
   };
 
   const fetchAppointments = async () => {
@@ -61,7 +55,6 @@ const AppointmentsPage: React.FC = () => {
   }
 
   return (
- 
     <View style={styles.container}>
       <Stack.Screen
         options={{

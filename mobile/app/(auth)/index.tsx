@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Modal } from 'react-native';
 import Listings from "@/components/Listings";
 import { Stack, useRouter } from "expo-router";
 import ExploreHeader from "@/components/ExploreHeader";
@@ -9,6 +9,7 @@ import PhysicalRecordCard from '@/components/PhysicalRecordCard';
 import { useAuth } from '@/hooks/useAuth';
 import Button from '@/components/Button';
 import EmptyCard from '@/components/EmptyCard';
+import AddPhysicalRecordModal from '@/components/AddPhysicalRecordModal';
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -16,6 +17,7 @@ const Page: React.FC = () => {
   const [records, setRecords] = useState<PhysicalRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -32,7 +34,11 @@ const Page: React.FC = () => {
   }, [user]);
 
   const handleAddRecord = () => {
-    router.push('(auth)/addrecord');
+    setModalVisible(true);
+  };
+
+  const handleSaveRecord = (newRecord: PhysicalRecord) => {
+    setRecords([...records, newRecord]);
   };
 
   if (loading) {
@@ -64,6 +70,12 @@ const Page: React.FC = () => {
           ))
         )}
       </ScrollView>
+      <AddPhysicalRecordModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleSaveRecord}
+        userId={user ? user._id : ''}
+      />
     </SafeAreaView>
   );
 };

@@ -15,6 +15,7 @@ import profileRoutes from "./routes/profileRoutes.js";
 import medicationRoutes from "./routes/medicationRoutes.js";
 import symptomRoutes from "./routes/symptomRoutes.js";
 import healthRoutes from "./routes/healthRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js"; // Import the AI routes
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -72,6 +73,7 @@ app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/medications", medicationRoutes);
 app.use("/api/v1/symptoms", symptomRoutes);
 app.use("/api/v1/healthrecords", healthRoutes);
+app.use("/api/v1", aiRoutes); // Add AI routes
 
 //******** PORTS AND LISTEN *******/
 const port = process.env.PORT || 8080;
