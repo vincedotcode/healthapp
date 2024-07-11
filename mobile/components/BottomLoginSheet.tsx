@@ -10,20 +10,7 @@ const BottomLoginSheet = () => {
 
   return (
     <View style={[styles.container, { paddingBottom: bottom }]}>
-      <Button
-        textStyle={{ color: "white" }}
-        variant={"outline"}
-        startIcon={
-          <Ionicons
-            name="logo-google"
-            size={16}
-            style={styles.btnIcon}
-            color={"#fff"}
-          />
-        }
-      >
-        Continue with Google
-      </Button>
+  
       <Link href={"/register"} asChild>
         <Button
           textStyle={{ color: "black" }}

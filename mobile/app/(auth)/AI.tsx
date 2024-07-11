@@ -4,6 +4,9 @@ import Button from "@/components/Button";
 import { Card, CardContent, CardFooter } from "@/components/Card";
 import Input from "@/components/Input";
 import useHealthChatService from "@/services/ai";
+import { Stack, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import TitleHeader from '@/components/TitleHeader';
 
 const Ai = () => {
   const [messages, setMessages] = useState<{ text: string, type: 'user' | 'ai' }[]>([]);
@@ -30,41 +33,48 @@ const Ai = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>AI BOT</Text>
-      <ScrollView style={styles.chatContainer} contentContainerStyle={styles.chatContent}>
-        {messages.map((msg, index) => (
-          <Card key={index} style={styles.messageCard}>
-            <CardContent>
-              <Text style={msg.type === 'user' ? styles.userMessageText : styles.aiMessageText}>
-                {msg.type === 'user' ? 'User: ' : 'AI: '}
-                {msg.text}
-              </Text>
-            </CardContent>
-            <CardFooter>
-              <Text style={styles.timestamp}>Just now</Text>
-            </CardFooter>
-          </Card>
-        ))}
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0000ff" />
-            <Text style={styles.loadingText}>Loading...</Text>
-          </View>
-        )}
-      </ScrollView>
-      <View style={styles.inputContainer}>
-        <Input
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Type a message"
-          containerStyle={styles.input}
-        />
-        <Button variant="default" onPress={handleSendMessage}>
-          Send
-        </Button>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <Stack.Screen
+        options={{
+          header: () => <TitleHeader pageName="AI Health Assistant" />,
+        }}
+      />
+
+      <View style={styles.container}>
+        <ScrollView style={styles.chatContainer} contentContainerStyle={styles.chatContent}>
+          {messages.map((msg, index) => (
+            <Card key={index} style={styles.messageCard}>
+              <CardContent>
+                <Text style={msg.type === 'user' ? styles.userMessageText : styles.aiMessageText}>
+                  {msg.type === 'user' ? 'User: ' : 'AI: '}
+                  {msg.text}
+                </Text>
+              </CardContent>
+              <CardFooter>
+                <Text style={styles.timestamp}>Just now</Text>
+              </CardFooter>
+            </Card>
+          ))}
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color="#0000ff" />
+              <Text style={styles.loadingText}>Loading...</Text>
+            </View>
+          )}
+        </ScrollView>
+        <View style={styles.inputContainer}>
+          <Input
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Type a message"
+            containerStyle={styles.input}
+          />
+          <Button variant="default" onPress={handleSendMessage}>
+            Send
+          </Button>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

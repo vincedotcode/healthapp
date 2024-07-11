@@ -3,18 +3,21 @@ import { View, Text, StyleSheet, ActivityIndicator, SafeAreaView, ScrollView } f
 import { useLocalSearchParams, useRouter, Stack, Link } from 'expo-router';
 import { getAppointmentsById, AppointmentDetailsProps } from '@/services/appointment';
 import { getMedicationsByAppointmentId, Medication } from '@/services/medication';
+import { getHealthRecordsByAppointmentId, HealthRecord } from '@/services/health'; // Import the function
 import AppointmentDetails from '@/components/AppointmentDetailsCard';
 import MedicationCard from '@/components/MedicationCard';
+import HealthRecordCard from '@/components/HealthRecordCard'; // Import the new component
 import SuccessModal from '@/components/SuccessModal';
 import { Ionicons } from "@expo/vector-icons";
 import Colors from '@/constants/Colors';
 import { getSymptomsByAppointmentId, Symptom } from '@/services/symptom';
-import SymptomCard from "@/components/SymptomCard"
+import SymptomCard from "@/components/SymptomCard";
 
 const AppointmentPage: React.FC = () => {
   const { id: appointmentId } = useLocalSearchParams<{ id: string }>();
   const [appointment, setAppointment] = useState<AppointmentDetailsProps | null>(null);
   const [medications, setMedications] = useState<Medication[] | null>(null);
+  const [healthRecords, setHealthRecords] = useState<HealthRecord[] | null>(null); // State for health records
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -44,6 +47,18 @@ const AppointmentPage: React.FC = () => {
       console.error('Error fetching medications:', errorMessage);
     }
   };
+
+  const fetchHealthRecords = async () => {
+    try {
+      const response = await getHealthRecordsByAppointmentId(appointmentId as string);
+      setHealthRecords(response.data);
+    } catch (err) {
+      const errorMessage = (err as Error).message;
+      setError(errorMessage);
+      console.error('Error fetching health records:', errorMessage);
+    }
+  };
+
   const fetchSymptoms = async () => {
     try {
       const response = await getSymptomsByAppointmentId(appointmentId as string);
@@ -64,10 +79,17 @@ const AppointmentPage: React.FC = () => {
     fetchMedications();
     setSuccessMessage('Medication deleted successfully!');
   };
+
   const handleSymptomAdded = (symptom: Symptom) => {
     fetchSymptoms();
     setSuccessMessage('Symptom added successfully!');
   };
+
+  const handleHealthRecordAdded = (record: HealthRecord) => {
+    fetchHealthRecords();
+    setSuccessMessage('Health record added successfully!');
+  };
+
   const closeSuccessModal = () => {
     setSuccessMessage(null);
   };
@@ -76,6 +98,7 @@ const AppointmentPage: React.FC = () => {
     if (appointmentId) {
       fetchAppointment();
       fetchMedications();
+      fetchHealthRecords();
     }
   }, [appointmentId]);
 
@@ -106,6 +129,7 @@ const AppointmentPage: React.FC = () => {
             appointment={appointment}
             onSymptomAdded={handleSymptomAdded}
             onMedicationAdded={handleMedicationAdded}
+            onHealthRecordAdded={handleHealthRecordAdded}
           />
         )}
         <Text style={styles.title}>Medications</Text>
@@ -120,7 +144,18 @@ const AppointmentPage: React.FC = () => {
         ) : (
           <Text>No Medications Found</Text>
         )}
-          <Text style={styles.title}>Symptoms</Text>
+        <Text style={styles.title}>Health Records</Text>
+        {healthRecords && healthRecords.length > 0 ? (
+          healthRecords.map((record: HealthRecord) => (
+            <HealthRecordCard
+              key={record._id}
+              record={record}
+            />
+          ))
+        ) : (
+          <Text>No Health Records Found</Text>
+        )}
+        <Text style={styles.title}>Symptoms</Text>
         {symptoms && symptoms.length > 0 ? (
           symptoms.map((symptom: Symptom) => (
             <SymptomCard

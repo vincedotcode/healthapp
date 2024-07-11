@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import Colors from '@/constants/Colors';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
@@ -41,7 +42,7 @@ const AddHealthRecordModal: React.FC<AddHealthRecordModalProps> = ({ visible, on
     medication_prescribed: '',
     lab_results: '',
     notes: '',
-    status: 'Pending',
+    status: 'Reviewed',
     reviewed_by: '',
   });
 
@@ -58,10 +59,12 @@ const AddHealthRecordModal: React.FC<AddHealthRecordModalProps> = ({ visible, on
         ...form,
         user_id: userId,
         doctor_id: doctorId,
+        medication_prescribed: 'Medications Prescribed',
+        reviewed_by: doctorId,
         appointment_id: appointmentId,
       };
       const response = await createHealthRecord(newRecord);
- 
+      onSave(response.data);
       onClose();
     } catch (error) {
       console.error('Error adding health record:', error);
@@ -81,11 +84,18 @@ const AddHealthRecordModal: React.FC<AddHealthRecordModalProps> = ({ visible, on
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Add Health Record</Text>
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            <Input
-              label="Record Type"
-              value={form.record_type}
-              onChangeText={(text) => handleInputChange('record_type', text)}
-            />
+            <Text style={styles.label}>Record Type</Text>
+            <Picker
+              selectedValue={form.record_type}
+              style={styles.input}
+              onValueChange={(itemValue) => handleInputChange('record_type', itemValue)}
+            >
+              <Picker.Item label="Diagnosis" value="Diagnosis" />
+              <Picker.Item label="Treatment" value="Treatment" />
+              <Picker.Item label="Prescription" value="Prescription" />
+              <Picker.Item label="Lab Result" value="Lab Result" />
+              <Picker.Item label="Follow-up" value="Follow-up" />
+            </Picker>
             <Input
               label="Description"
               value={form.description}
@@ -102,11 +112,6 @@ const AddHealthRecordModal: React.FC<AddHealthRecordModalProps> = ({ visible, on
               onChangeText={(text) => handleInputChange('attachment_path', text)}
             />
             <Input
-              label="Follow-up Date"
-              value={form.follow_up_date}
-              onChangeText={(text) => handleInputChange('follow_up_date', text)}
-            />
-            <Input
               label="Symptoms"
               value={form.symptoms}
               onChangeText={(text) => handleInputChange('symptoms', text)}
@@ -116,11 +121,7 @@ const AddHealthRecordModal: React.FC<AddHealthRecordModalProps> = ({ visible, on
               value={form.treatment}
               onChangeText={(text) => handleInputChange('treatment', text)}
             />
-            <Input
-              label="Medication Prescribed"
-              value={form.medication_prescribed}
-              onChangeText={(text) => handleInputChange('medication_prescribed', text)}
-            />
+          
             <Input
               label="Lab Results"
               value={form.lab_results}
@@ -130,16 +131,6 @@ const AddHealthRecordModal: React.FC<AddHealthRecordModalProps> = ({ visible, on
               label="Notes"
               value={form.notes}
               onChangeText={(text) => handleInputChange('notes', text)}
-            />
-            <Input
-              label="Status"
-              value={form.status}
-              onChangeText={(text) => handleInputChange('status', text)}
-            />
-            <Input
-              label="Reviewed By"
-              value={form.reviewed_by}
-              onChangeText={(text) => handleInputChange('reviewed_by', text)}
             />
           </ScrollView>
           <View style={styles.buttonContainer}>
@@ -187,6 +178,16 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     marginHorizontal: 5,
+  },
+  input: {
+    height: 50,
+    width: '100%',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.light.primary,
+    marginBottom: 5,
   },
 });
 

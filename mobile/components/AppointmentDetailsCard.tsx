@@ -5,20 +5,20 @@ import Button from './Button';
 import Colors from '@/constants/Colors';
 import AddMedicationModal from './AddMedicationModal';
 import AddSymptomModal from './AddSymptomModal';
-import AddHealthRecordModal from './AddHealthRecordModal'; // Import the new modal
+import AddHealthRecordModal from './AddHealthRecordModal';
 import { AppointmentDetailsProps } from '@/services/appointment';
 
 interface AppointmentDetailsComponentProps {
   appointment: AppointmentDetailsProps;
   onMedicationAdded: (medication: any) => void;
   onSymptomAdded: (symptom: any) => void;
-  onHealthRecordAdded: (record: any) => void; // New handler for health records
+  onHealthRecordAdded: (record: any) => void;
 }
 
 const AppointmentDetails: React.FC<AppointmentDetailsComponentProps> = ({ appointment, onMedicationAdded, onSymptomAdded, onHealthRecordAdded }) => {
   const [isMedicationModalVisible, setIsMedicationModalVisible] = useState(false);
   const [isSymptomModalVisible, setIsSymptomModalVisible] = useState(false);
-  const [isHealthRecordModalVisible, setIsHealthRecordModalVisible] = useState(false); // State for health record modal
+  const [isHealthRecordModalVisible, setIsHealthRecordModalVisible] = useState(false);
 
   const handleAddMedication = (medication: any) => {
     setIsMedicationModalVisible(false);

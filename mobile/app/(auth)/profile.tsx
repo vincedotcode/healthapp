@@ -6,6 +6,9 @@ import { getUserProfile, UserProfile } from '@/services/profile';
 import { getApplicationsByUserId, Application } from '@/services/application';
 import { useAuth } from '@/hooks/useAuth';
 import Colors from '@/constants/Colors';
+import { Stack, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import TitleHeader from '@/components/TitleHeader';
 
 const ProfileScreen: React.FC = () => {
   const { user } = useAuth();
@@ -70,20 +73,28 @@ const ProfileScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <ProfileCard profile={profile} onApplicationSuccess={handleApplicationSuccess} />
-      {applicationSuccess && (
-        <View style={styles.successMessage}>
-          <Text style={styles.successText}>Application submitted successfully!</Text>
-        </View>
-      )}
-      <Text style={styles.applicationTitle}>My Doctor Application</Text>
-      {application ? (
-        <ApplicationCard application={application} />
-      ) : (
-        <Text style={styles.noApplicationText}>No applications found</Text>
-      )}
-    </ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <Stack.Screen
+        options={{
+          header: () => <TitleHeader pageName="My Profile" />,
+        }}
+      />
+
+      <ScrollView contentContainerStyle={styles.container}>
+        <ProfileCard profile={profile} onApplicationSuccess={handleApplicationSuccess} />
+        {applicationSuccess && (
+          <View style={styles.successMessage}>
+            <Text style={styles.successText}>Application submitted successfully!</Text>
+          </View>
+        )}
+        <Text style={styles.applicationTitle}>My Doctor Application</Text>
+        {application ? (
+          <ApplicationCard application={application} />
+        ) : (
+          <Text style={styles.noApplicationText}>No applications found</Text>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

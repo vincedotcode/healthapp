@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import AppointmentCard from '@/components/AppointmentCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, useRouter } from 'expo-router';
-import ExploreHeader from '@/components/ExploreHeader';
+import TitleHeader from '@/components/TitleHeader';
 import Button from '@/components/Button';
 import EmptyCard from '@/components/EmptyCard';
 import { useFocusEffect } from '@react-navigation/native';
@@ -60,7 +60,7 @@ const UserAppointments: React.FC = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Stack.Screen
         options={{
-          header: () => <ExploreHeader />,
+          header: () => <TitleHeader pageName="My Appointments"  />,
         }}
       />
       <ScrollView style={styles.container}>

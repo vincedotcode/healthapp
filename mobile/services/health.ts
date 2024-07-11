@@ -20,7 +20,7 @@ interface CreateHealthRecord {
 
 interface CreateHealthRecordResponse {
   success: boolean;
-  data: CreateHealthRecord;
+  data: HealthRecord;
 }
 
 interface ApiResponse {
