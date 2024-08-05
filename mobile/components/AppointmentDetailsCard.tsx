@@ -70,7 +70,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsComponentProps> = ({ appoin
         <Button variant="default" style={styles.button} onPress={() => setIsMedicationModalVisible(true)}>
           Add Medication
         </Button>
-        <Button variant="secondary" style={styles.button} onPress={() => setIsSymptomModalVisible(true)}>
+        <Button variant="destructive" style={styles.button} onPress={() => setIsSymptomModalVisible(true)}>
           Add Symptoms
         </Button>
         <Button variant="outline" style={styles.button} onPress={() => setIsHealthRecordModalVisible(true)}>
